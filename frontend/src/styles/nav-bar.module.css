@@ -12,6 +12,7 @@
     flex-direction: row;
     font-family: Arial, Helvetica, sans-serif;
     vertical-align: center;
+    z-index: 1000 !important;
 }
 
 .heading {
