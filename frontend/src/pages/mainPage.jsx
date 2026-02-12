@@ -1,68 +1,77 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../styles/mainPage.module.css";
 import "../components/navigation-bar";
 
 import BookList from "../components/book-list";
 import NavBar from "../components/navigation-bar";
 import SideBar from "../components/side-bar";
-
-const books = [ // Books for testing purposes
-    { name: "Book 1", image: "https://placehold.co/300x300", rating: "★ ★ ★ ★ ☆"},
-    { name: "Book 2", image: "https://placehold.co/300x300", rating: "★ ★ ★ ★ ☆"},
-    { name: "Book 3", image: "https://placehold.co/300x300", rating: "★ ★ ★ ★ ☆"},
-    { name: "Book 4", image: "https://placehold.co/300x300", rating: "★ ★ ★ ★ ☆"},
-    { name: "Book 5", image: "https://placehold.co/300x300", rating: "★ ★ ★ ★ ☆"},
-    { name: "Book 6", image: "https://placehold.co/300x300", rating: "★ ★ ★ ★ ☆"},
-    { name: "Book 7", image: "https://placehold.co/300x300", rating: "★ ★ ★ ★ ☆"},
-    { name: "Book 8", image: "https://placehold.co/300x300", rating: "★ ★ ★ ★ ☆"},
-    { name: "Book 9", image: "https://placehold.co/300x300", rating: "★ ★ ★ ★ ☆"}
-]
-
-const genres = [
-    { name: "Genre 1", image: "https://placehold.co/300x300", rating: "★ ★ ★ ★ ☆"},
-    { name: "Genre 2", image: "https://placehold.co/300x300", rating: "★ ★ ★ ★ ☆"},
-    { name: "Genre 3", image: "https://placehold.co/300x300", rating: "★ ★ ★ ★ ☆"},
-    { name: "Genre 4", image: "https://placehold.co/300x300", rating: "★ ★ ★ ★ ☆"},
-    { name: "Genre 5", image: "https://placehold.co/300x300", rating: "★ ★ ★ ★ ☆"},
-    { name: "Genre 6", image: "https://placehold.co/300x300", rating: "★ ★ ★ ★ ☆"},
-    { name: "Genre 7", image: "https://placehold.co/300x300", rating: "★ ★ ★ ★ ☆"},
-    { name: "Genre 8", image: "https://placehold.co/300x300", rating: "★ ★ ★ ★ ☆"},
-    { name: "Genre 9", image: "https://placehold.co/300x300", rating: "★ ★ ★ ★ ☆"}
-]
+import SearchBook from "../components/search-book";
+import { fetchMainPageBooks, MAIN_PAGE_CATEGORIES } from "../services/pageBookData";
 
 export default function MainPage() {
-    return(
+    const [booksByCategory, setBooksByCategory] = useState({});
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState({});
+
+    useEffect(() => {
+        let isMounted = true;
+
+        async function loadBooks() {
+            setLoading(true);
+            const { booksByCategory: books, errorsByCategory } = await fetchMainPageBooks({
+                maxResults: 12,
+            });
+
+            if (!isMounted) return;
+
+            setBooksByCategory(books);
+            setError(errorsByCategory);
+            setLoading(false);
+        }
+
+        loadBooks();
+
+        return () => {
+            isMounted = false;
+        };
+    }, []);
+
+    return (
         <>
             <NavBar />
             <div className={styles.main_page}>
                 <SideBar />
                 <div className={styles.content}>
+                    <SearchBook />
+                    
                     <h2>Trending Books</h2>
-                    <section className={styles.book_list}>
-                        {books.map((r,i) => (
-                            <BookList
-                            key = {i}
-                            name = {r.name}
-                            image = {r.image}
-                            rating = {r.rating} 
-                            />
-                        ))}
-                    </section>
 
-                    <h2>Top Genres</h2>
-                    <section className={styles.genre_list}>
-                        {genres.map((r,i) => (
-                            <BookList 
-                            key = {i}
-                            name = {r.name}
-                            image = {r.image}
-                            rating = {r.rating}
-                            />
-                        ))}
-                    </section>
+                    {MAIN_PAGE_CATEGORIES.map((cat) => (
+                        <section key={cat.key}>
+                            <h2>{cat.title}</h2>
+
+                            {loading && <p>Loading...</p>}
+                            {error[cat.key] && <p>Error: {error[cat.key]}</p>}
+
+                            {!loading && !error[cat.key] && (
+                                <section className={styles.book_list}>
+                                    {(booksByCategory[cat.key] ?? []).map((book) => (
+                                        <BookList
+                                            key={book.id}
+                                            name={book.name}
+                                            image={book.image}
+                                            rating={book.rating}
+                                            description={book.description}
+                                            bookId={book.id}
+                                            query={cat.query}
+                                        />
+                                    ))}
+                                </section>
+                            )}
+                        </section>
+                    ))}
                 </div>
             </div>
         </>
-    )
+    );
 }
-
