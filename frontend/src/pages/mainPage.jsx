@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "../styles/mainPage.module.css";
 import "../components/navigation-bar";
 
-import BookList from "../components/book-list";
+import BookCard from "../components/book-card";
 import NavBar from "../components/navigation-bar";
 import SideBar from "../components/side-bar";
 import SearchBook from "../components/search-book";
@@ -56,7 +56,8 @@ export default function MainPage() {
                             {!loading && !error[cat.key] && (
                                 <section className={styles.book_list}>
                                     {(booksByCategory[cat.key] ?? []).map((book) => (
-                                        <BookList
+                                        <BookCard
+                                            id={book.id}
                                             key={book.id}
                                             name={book.name}
                                             image={book.image}
