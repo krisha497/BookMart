@@ -1,0 +1,64 @@
+.global_rankings {
+    display: flex;
+    flex-direction: row;
+}
+
+.content {
+    flex: 2;
+    width: 80%;
+    padding: 20px 0px 0px 20px;
+    margin: 0;
+    text-align: center;
+}
+
+.graph {
+    width: 90%;
+    min-width: 300px;
+    height: 350px;
+}
+
+.ranking_list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center; 
+}
+
+.card {
+    background-color: #DDD6CC;
+    font-weight: bold;
+    margin: 15px;
+    border-radius: 25px;
+    transition: transform 0.5s ease;
+}
+
+.card:hover {
+    box-shadow: 10px 10px gray;
+    transform: scale(105%);
+}
+
+.card_image {
+    width: 80%;
+    border-radius: 20px;
+}
+
+.card_name {
+    color: #022B3A;
+    font-size: 1.2em;
+}
+
+.view_button {
+    background-color: #679289;
+    border: none;
+    width: 50%;
+    height: auto;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 25px;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.view_button:hover {
+    transform: scale(105%); 
+}

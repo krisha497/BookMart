@@ -1,0 +1,93 @@
+.AI_page {
+    display: flex;
+    flex-direction: row;
+}
+
+.content {
+    flex: 2;
+    width: 80%;
+    padding: 20px 0px 0px 20px;
+    margin: 0;
+    text-align: center;
+}
+
+.input {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.textbox {
+    resize: none;
+    border: none;
+    width: 90%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid  #ccc;
+    margin: auto;
+    overflow-y: auto;
+}
+
+.submit {
+    align-self: flex-end;
+    position: relative;
+    padding: 5px;
+    background-color: #A5668B;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 5%;
+    bottom: 45px;
+}
+
+.submit:hover {
+    background-color: #ae7596;
+}
+
+.results {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center; 
+}
+
+.card {
+    background-color: #DDD6CC;
+    font-weight: bold;
+    margin: 15px;
+    border-radius: 25px;
+    transition: transform 0.5s ease;
+}
+
+.card:hover {
+    box-shadow: 10px 10px gray;
+    transform: scale(105%);
+}
+
+.card_image {
+    width: 80%;
+    border-radius: 20px;
+}
+
+.card_name {
+    color: #022B3A;
+    font-size: 1.2em;
+}
+
+.view_button {
+    background-color: #679289;
+    border: none;
+    width: 50%;
+    height: auto;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 25px;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.view_button:hover {
+    transform: scale(105%); 
+}
