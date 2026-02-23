@@ -6,6 +6,8 @@ import styles from '../styles/SignUpPage.module.css';
 
 export default function SignUp() {
 
+    const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
     const [formData, setFormData ] = useState({
         username: "",
         email: "",
@@ -27,7 +29,7 @@ export default function SignUp() {
         e.preventDefault();
 
         try {
-            const response = await fetch("http://localhost/Bookmart/backend/signup.php", {
+            const response = await fetch(`${API_BASE}/signup.php`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -97,7 +99,7 @@ export default function SignUp() {
                     />
                 </div>
                 <button type="submit" className={styles.submit_button}>Create Account</button>
-                <p className={styles.to_login}>Already have an account? <a className={styles.login_link} href='/LogIn'>Log In</a></p>
+                <p className={styles.to_login}>Already have an account? <a className={styles.login_link} href='/login'>Log In</a></p>
             </form>
         </div>
     )

@@ -6,6 +6,8 @@ import styles from '../styles/LogInPage.module.css';
 
 export default function LogIn() {
 
+    const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
     const [ formData, setFormData ] = useState({
         username: "",
         password: ""
@@ -24,7 +26,7 @@ export default function LogIn() {
         e.preventDefault();
 
         try {
-            const response = await fetch("http://localhost/bookmart/backend/login.php", {
+            const response = await fetch(`${API_BASE}/login.php`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -77,7 +79,7 @@ export default function LogIn() {
                 </div>
                 <button type="submit" className={styles.submit_button}>Log In</button>
                 <a className={styles.forgot_password_link} href='/forgot'>Forgot Password?</a>
-                <p className={styles.to_signup}>Do not have an account? <a className={styles.signup_link} href='/SignUp'>Sign Up</a></p>
+                <p className={styles.to_signup}>Do not have an account? <a className={styles.signup_link} href='/signup'>Sign Up</a></p>
             </form>
         </div>
     )

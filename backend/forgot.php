@@ -1,9 +1,8 @@
 <?php
 
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Credentials: *");
-header("Access-Control-Allow-Methods: *");
-header("Access-Control-Allow-Headers: *");
+header("Access-Control-Allow-Origin: https://book-mart-krisha497s-projects.vercel.app");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
@@ -38,7 +37,7 @@ if ($result->num_rows === 1) {
     $stmt->bind_param("sss", $token, $expires, $email);
     $stmt->execute();
 
-    $resetLink = "http://localhost:5173/reset?token=$token";
+    $resetLink = "https://book-mart-krisha497s-projects.vercel.app/reset?token=$token";
 
     echo json_encode([
         "status" => "success",

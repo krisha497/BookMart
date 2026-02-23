@@ -6,6 +6,8 @@ import styles from "../styles/ForgotPasswordPage.module.css"
 
 export default function ForgotPassword() {
 
+    const API_BASE = import.meta.env.VITE_API_BASE_URL;
+
     const [ formData, setFormData ] = useState({
         email: ""
     });
@@ -25,7 +27,7 @@ export default function ForgotPassword() {
         e.preventDefault();
 
         try {
-            const response = await fetch("http://localhost/Bookmart/backend/forgot.php", {
+            const response = await fetch(`${API_BASE}/forgot.php`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -64,7 +66,7 @@ export default function ForgotPassword() {
                     />
                 </div>
                 <button type="submit" className={styles.submit_button}>Forgot Password</button>
-                <p className={styles.to_login}>Go back to <a className={styles.login_link} href='/LogIn'>Log In Page</a></p>
+                <p className={styles.to_login}>Go back to <a className={styles.login_link} href='/login'>Log In Page</a></p>
 
                 {resetLink && <p>Reset Password Link: </p>}
                 {resetLink && <a href={resetLink} className={styles.reset_link}>Click here</a>}
