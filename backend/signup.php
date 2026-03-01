@@ -1,8 +1,12 @@
 <?php
 
-header("Access-Control-Allow-Origin: https://book-mart-krisha497s-projects.vercel.app");
+require "db.php";
+$allowedOrigin = rtrim($env['FRONTEND_URL'] ?? 'http://localhost:5173', '/');
+
+header("Access-Control-Allow-Origin: $allowedOrigin");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Credentials: true");
 
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     http_response_code(200);
@@ -12,12 +16,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 header("Content-Type: application/json");
 
 session_start();
-
-include "db.php";
-
-if (mysqli_connect_errno()) {
-    exit('Failed to connect to MySQL');
-}
 
 $json = file_get_contents('php://input');
 $data = json_decode($json, true);
@@ -35,7 +33,8 @@ if(!$username || !$email || !$password || !$confirm) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($password !== $confirm) {
-        exit('Passwords do not match');
+        echo json_encode(["status" => "error", "message" => "Passwords do not match"]);
+        exit;
     }
 
     date_default_timezone_set("Europe/London");
