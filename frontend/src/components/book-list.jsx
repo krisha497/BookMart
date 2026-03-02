@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import styles from "../styles/book-card.module.css";
+import styles from "../styles/bookCard.module.css";
 import placeholder from "../assets/book-img.png";
 
 export default function BookList({name, image, rating, description, bookId, query}) {
