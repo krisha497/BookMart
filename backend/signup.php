@@ -1,9 +1,18 @@
 <?php
 
 require "db.php";
-$allowedOrigin = rtrim($env['FRONTEND_URL'] ?? 'http://localhost:5173', '/');
 
-header("Access-Control-Allow-Origin: $allowedOrigin");
+$allowedOrigins = array_filter([
+    rtrim($env['FRONTEND_URL'] ?? '', '/'),
+    'http://localhost:5173'
+]);
+
+$requestOrigin = rtrim($_SERVER['HTTP_ORIGIN'] ?? '', '/');
+if (in_array($requestOrigin, $allowedOrigins, true)) {
+    header("Access-Control-Allow-Origin: $requestOrigin");
+    header("Vary: Origin");
+}
+
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Credentials: true");
@@ -15,6 +24,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 header("Content-Type: application/json");
 
+$isHttps = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+session_set_cookie_params([
+  'lifetime' => 0,
+  'path' => '/',
+  'secure' => $isHttps,
+  'httponly' => true,
+  'samesite' => $isHttps ? 'None' : 'Lax'
+]);
+
 session_start();
 
 $json = file_get_contents('php://input');
@@ -25,12 +43,12 @@ $email = $data['email'] ?? null;
 $password = $data['password'] ?? null;
 $confirm = $data['confirm'] ?? null;
 
-if(!$username || !$email || !$password || !$confirm) {
-    echo json_encode(["status" => "error", "message" => "Please fill all fields"]);
-    exit;
-}
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    if(!$username || !$email || !$password || !$confirm) {
+        echo json_encode(["status" => "error", "message" => "Please fill all fields"]);
+        exit;
+    }
 
     if ($password !== $confirm) {
         echo json_encode(["status" => "error", "message" => "Passwords do not match"]);

@@ -34,6 +34,7 @@ export default function ResetPassword() {
                 headers: {
                     "Content-Type": "application/json"
                 },
+                credentials: "include",
                 body: JSON.stringify({ token, password: formData.password, confirm: formData.confirm })
             }); 
 

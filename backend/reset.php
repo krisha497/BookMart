@@ -3,9 +3,17 @@
 require "db.php";
 session_start();
 
-$allowedOrigin = rtrim($env['FRONTEND_URL'] ?? 'http://localhost:5173', '/');
+$allowedOrigins = array_filter([
+    rtrim($env['FRONTEND_URL'] ?? '', '/'),
+    'http://localhost:5173'
+]);
 
-header("Access-Control-Allow-Origin: $allowedOrigin");
+$requestOrigin = rtrim($_SERVER['HTTP_ORIGIN'] ?? '', '/');
+if (in_array($requestOrigin, $allowedOrigins, true)) {
+    header("Access-Control-Allow-Origin: $requestOrigin");
+    header("Vary: Origin");
+}
+
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Credentials: true");
@@ -15,6 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
+header("Content-Type: application/json");
+
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (!isset($_GET['token'])) {
         echo json_encode(["status" => "error", "message" => "Invalid Token"]);
@@ -23,6 +33,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $token = $_GET['token'];
     }
     $stmt = $con->prepare("SELECT id FROM user_data WHERE reset_token = ? AND reset_expires > NOW()");
+    if (!$stmt) {
+        echo json_encode(["status" => "error", "message" => "Database query error"]);
+        exit;
+    }
     $stmt->bind_param("s", $token);
     $stmt->execute();
     $stmt->store_result();
@@ -61,6 +75,10 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         SET password = ?, reset_token = NULL, reset_expires = NULL
         WHERE reset_token = ? AND reset_expires > NOW()"
     );
+    if (!$stmt) {
+        echo json_encode(["status" => "error", "message" => "Database query error"]);
+        exit;
+    }
 
     $stmt->bind_param("ss", $newPassword, $token);
     
