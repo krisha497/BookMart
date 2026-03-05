@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $hashed = password_hash($password, PASSWORD_DEFAULT);
 
-    if ($stmt = $con->prepare('SELECT id FROM user_data WHERE username = ? OR email = ?')) {
+    if ($stmt = $con->prepare('SELECT id FROM users WHERE username = ? OR email = ?')) {
         $stmt->bind_param('ss', $username, $email);
         $stmt->execute();
         $stmt->store_result();
@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->close();
     }
 
-    if ($stmt = $con->prepare('INSERT INTO user_data (username, email, password, registered) VALUES (?, ?, ?, ?)')) {
+    if ($stmt = $con->prepare('INSERT INTO users (username, email, password, registered) VALUES (?, ?, ?, ?)')) {
         $stmt->bind_param('ssss', $username, $email, $hashed, $registered);
 
         if ($stmt->execute()) {

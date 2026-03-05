@@ -25,7 +25,7 @@ if (!$email) {
     exit;
 }
 
-$stmt = $con->prepare("SELECT id FROM user_data WHERE email = ?");
+$stmt = $con->prepare("SELECT id FROM users WHERE email = ?");
 $stmt->bind_param("s", $email);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -34,7 +34,7 @@ if ($result->num_rows === 1) {
     $token = bin2hex(random_bytes(32));
     $expires = date("Y-m-d H:i:s", time() + 3600);
 
-    $stmt = $con->prepare("UPDATE user_data SET reset_token = ?, reset_expires = ? WHERE email = ?");
+    $stmt = $con->prepare("UPDATE users SET reset_token = ?, reset_expires = ? WHERE email = ?");
     $stmt->bind_param("sss", $token, $expires, $email);
     $stmt->execute();
 

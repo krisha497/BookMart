@@ -8,7 +8,7 @@ header("Content-Type: Application/json");
 $host = "localhost";
 $user = "root";
 $pass = "";
-$dbname = "users";
+$dbname = "bookmart";
 
 $con = new mysqli($host, $user, $pass, $dbname);
 if ($con->connect_error) {

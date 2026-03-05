@@ -36,7 +36,7 @@ if (!$user_input || !$pass_input) {
     exit;
 }
 
-if ($stmt = $con->prepare('SELECT id, password from user_data where username = ?')) {
+if ($stmt = $con->prepare('SELECT id, password from users where username = ?')) {
     $stmt->bind_param('s', $user_input);
     $stmt->execute();
     $stmt->store_result();
