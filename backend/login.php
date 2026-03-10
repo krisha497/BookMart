@@ -1,9 +1,23 @@
 <?php
 
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Credentials: *");
+ini_set('display_errors', 0);
+error_reporting(0);
+
+session_name('BOOKMARTSESSION');
+
+session_set_cookie_params([
+    'lifetime' => 86400,
+    'path' => '/',
+    'domain' => 'localhost',
+    'secure' => false,
+    'httponly' => true,
+    'samesite' => 'Lax' 
+]);
+
+header("Access-Control-Allow-Origin: http://localhost:5173");
+header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: OPTIONS, POST, GET");
-header("Access-Control-Allow-Headers: *");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
@@ -46,11 +60,30 @@ if ($stmt = $con->prepare('SELECT id, password from users where username = ?')) 
         $stmt->fetch();
 
         if (password_verify($pass_input, $hashed_password)) {
-            session_regenerate_id();
+            
+            $_SESSION['user_loggedin'] = TRUE;
+            $_SESSION['user_name'] = $user_input;
+            $_SESSION['user_id'] = $id;
 
-            $_SESSION['account_loggedin'] = TRUE;
-            $_SESSION['account_name'] = $user_input;
-            $_SESSION['account_id'] = $id;
+            // After logging in, fetch the active cart of the user.
+            if ($cartStmt = $con->prepare("SELECT id FROM carts WHERE user_id = ? AND status = 'active'")) {
+                $cartStmt->bind_param('i', $id);
+                $cartStmt->execute();
+                $cartStmt->bind_result($cart_id);
+                
+                if ($cartStmt->fetch()) {
+                    // Cart exists
+                    $_SESSION['active_cart'] = $cart_id;
+                } else {
+                    // Create new cart
+                    $newCartStmt = $con->prepare("INSERT INTO carts (user_id, status) VALUES (?, 'active')");
+                    $newCartStmt->bind_param('i', $id);
+                    $newCartStmt->execute();
+                    $_SESSION['active_cart'] = $con->insert_id;
+                }
+            }
+
+            session_write_close();
 
             echo json_encode([
                 "status" => "success",

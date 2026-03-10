@@ -141,43 +141,21 @@
     color: #232323;
 }
 
-.cart_btn,
-.buy_btn,
-.wishlist_btn {
+.cart_btn {
     border-radius: 999px;
     padding: 0.58rem 1rem;
     font-size: 0.9rem;
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.2s ease;
-}
-
-.cart_btn {
     border: 1px solid #022b3a;
     background-color: #022b3a;
     color: #ffffff;
 }
 
-.buy_btn {
-    border: 1px solid #333333;
-    background-color: #333333;
-    color: #ffffff;
-}
 
-.wishlist_btn {
-    width: fit-content;
-    border: 1px solid #d7cebf;
-    background-color: #f8f3ec;
-    color: #2d2d2d;
-}
-
-.cart_btn:hover,
-.buy_btn:hover {
+.cart_btn:hover {
     background-color: #1f1f1f;
-}
-
-.wishlist_btn:hover {
-    background-color: #f0e9dd;
 }
 
 .description {

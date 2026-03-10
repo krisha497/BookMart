@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styles from "../styles/viewCart.module.css";
 
 import CartList from "../components/cart-list";
@@ -7,17 +7,48 @@ import SideBar from "../components/side-bar";
 
 import { FaCartPlus } from "react-icons/fa";
 
-const cart_items = [
-    { id: 1, name: "Book 1", image: "https://placehold.co/300x300", rating: "★ ★ ★ ★ ☆", price: 10, quantity: 1 },
-    { id: 2, name: "Book 2", image: "https://placehold.co/300x300", rating: "★ ★ ★ ★ ★", price: 12, quantity: 2 },
-    { id: 3, name: "Book 3", image: "https://placehold.co/300x300", rating: "★ ★ ★ ★ ☆", price: 8, quantity: 3 },
-    { id: 4, name: "Book 4", image: "https://placehold.co/300x300", rating: "★ ★ ☆ ☆ ☆", price: 20, quantity: 4 },
-    { id: 5, name: "Book 5", image: "https://placehold.co/300x300", rating: "★ ★ ★ ★ ★", price: 50, quantity: 5 },
-    { id: 6, name: "Book 6", image: "https://placehold.co/300x300", rating: "★ ★ ★ ☆ ☆", price: 30, quantity: 6 },
-    { id: 7, name: "Book 7", image: "https://placehold.co/300x300", rating: "★ ★ ★ ★ ★", price: 5, quantity: 7 }
-]
+export default function viewCart() {
 
-export default function ViewCart() {
+    const [ cartItems, setCartItems ] = useState([]);
+    const [ loading, setLoading ] = useState(true);
+    const [ error, setError ] = useState(null);
+
+    useEffect(() => {
+        async function getCart() {
+            try {
+                const response = await fetch("http://localhost/bookmart/backend/get_cart.php", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    credentials: "include"
+                });
+                if (!response.ok) {
+                    throw new Error("Failed to fetch cart.");
+                }
+
+                const result = await response.json();
+
+                if (result.status === "error") {
+                    alert("An error occured.");
+                    console.log(result.message);
+                } else {
+                    setCartItems(result);
+                }
+            } catch (err) {
+                alert("An error occured");
+                console.log(err);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        getCart();
+    }, []);
+
+    if (loading) return <p>Loading...</p>
+    if (error) return <p>Error: {error}</p>
+
     return(
         <>
             <NavBar />
@@ -38,7 +69,7 @@ export default function ViewCart() {
                         </thead>
 
                         <tbody>
-                            {cart_items.map((r,i) => (
+                            {cartItems.map((r,i) => (
                                 <CartList 
                                 key = {i}
                                 image={r.image}
