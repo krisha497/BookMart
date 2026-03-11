@@ -52,6 +52,7 @@ export default function viewCart() {
     return(
         <>
             <NavBar />
+            
             <div className={styles.view_cart}>
                 <SideBar />
                 <div className={styles.content}>
@@ -80,6 +81,10 @@ export default function viewCart() {
                             ))}
                         </tbody>
                     </table>
+                    <div className={styles.total}>
+                        <h3 className={styles.total_heading}>Total: ${cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}</h3>
+                        <button className={styles.checkout_btn}>Proceed to Checkout</button>
+                    </div>
                 </div>
             </div>
         </>

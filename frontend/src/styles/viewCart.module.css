@@ -44,3 +44,33 @@ thead {
     width: 100px;
     text-align: center;
 }
+
+.total {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+    margin-top: 20px;
+    margin-right: calc(5% - 20px);
+    padding: 15px 20px;
+}
+
+.total_heading {
+    font-size: 1.2rem;
+    color: #7a4f6d;
+}
+
+.checkout_btn {
+    background-color: #7a4f6d;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.checkout_btn:hover {
+    background-color: #5e3a54;
+}

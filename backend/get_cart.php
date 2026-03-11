@@ -61,6 +61,30 @@ if ($result->num_rows === 0) {
 }
 
 $items = $result->fetch_all(MYSQLI_ASSOC);
-echo json_encode($items);
+$cart_items = [];
+
+foreach ($items as $item) {
+    $volumeId = $item['google_volume_id'];
+    $quantity = $item['quantity'];
+
+    $apiUrl = "https://www.googleapis.com/books/v1/volumes/" . urlencode($volumeId);
+    $book_data = json_decode(file_get_contents($apiUrl), true);
+
+    $imageLinks = $book_data['volumeInfo']['imageLinks'] ?? [];
+    $image = $imageLinks['thumbnail'] ?? null;
+    $title = $book_data['volumeInfo']['title'] ?? "";
+    $rating = $book_data['volumeInfo']['averageRating'] ?? 3.9;
+    $price = round($rating * 5.5 + 8, 2);
+
+    $cart_items[] = [
+        "google_volume_id" => $volumeId,
+        "quantity" => $quantity,
+        "name" => $title,
+        "image" => $image,
+        "price" => $price
+    ];
+}
+
+echo json_encode($cart_items);
 
 ?>
