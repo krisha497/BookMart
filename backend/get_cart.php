@@ -27,19 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 session_start();
 include "db.php";
 
-error_log("Session ID in get_cart: " . session_id());
-error_log("Session data in get_cart: " . print_r($_SESSION, true));
-
-// echo json_encode([
-//     "debug" => [
-//         "session_id" => session_id(),
-//         "session_data" => $_SESSION,
-//         "cookies" => $_COOKIE
-//     ]
-// ]);
-// exit;
-
-
 if (!$_SESSION['user_loggedin']) {
     echo json_encode([
         "status" => "error",

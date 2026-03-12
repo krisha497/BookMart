@@ -43,6 +43,51 @@ export default function viewCart() {
         getCart();
     }, []);
 
+    const handleQuantityChange = async (google_volume_id, new_quantity) => {
+        if (new_quantity < 1) return;
+
+        try {
+            const response = await fetch("http://localhost/bookmart/backend/update_quantity.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                credentials: 'include',
+                body: JSON.stringify({ google_volume_id: google_volume_id, quantity: new_quantity})
+            });
+            const result = await response.json();
+            if (result.status === "success") {
+                setCartItems(prev => prev.map(item =>
+                    item.google_volume_id === google_volume_id
+                        ? { ...item, quantity: new_quantity }
+                        : item
+                ));
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    const handleRemove = async(google_volume_id) => {
+        try {
+            const response = await fetch("http://localhost/bookmart/backend/remove_from_cart.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                credentials: 'include',
+                body: JSON.stringify({ google_volume_id })
+            });
+
+            const result = await response.json();
+            if (result.status === "success") {
+                setCartItems(prev => prev.filter(item => item.google_volume_id !== google_volume_id));
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
     if (loading) return <p>Loading...</p>
     if (error) return <p>Error: {error}</p>
 
@@ -59,6 +104,7 @@ export default function viewCart() {
                             <th>Price</th>
                             <th>Quantity</th>
                             <th>Total</th>
+                            <th>Remove</th>
                         </tr>
                     </thead>
 
@@ -70,6 +116,9 @@ export default function viewCart() {
                             name = {r.name}
                             quantity = {r.quantity}
                             price = {r.price}
+                            google_volume_id={r.google_volume_id}
+                            onQuantityChange={handleQuantityChange}
+                            onRemove={handleRemove}
                             />
                         ))}
                     </tbody>
