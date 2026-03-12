@@ -19,7 +19,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy React build output to web root
-COPY --from=frontend-build /app/build /var/www/html
+COPY --from=frontend-build /app/dist /var/www/html
 
 # Copy PHP backend files
 COPY backend/ /var/www/html/api/
