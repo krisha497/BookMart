@@ -1,20 +1,25 @@
 .AI_page {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    height: 90%;
 }
 
 .content {
-    flex: 2;
-    width: 80%;
-    padding: 20px 0px 0px 20px;
-    margin: 0;
+    flex: 1;
+    overflow-y: auto;  
+    padding: 20px;
     text-align: center;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
 }
 
 .input {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    position: sticky;
+    bottom: 0;
 }
 
 .textbox {
@@ -24,6 +29,7 @@
     padding: 12px;
     border-radius: 8px;
     border: 1px solid  #ccc;
+    background: white;
     margin: auto;
     overflow-y: auto;
 }
@@ -46,48 +52,41 @@
     background-color: #ae7596;
 }
 
-.results {
+.hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+}
+
+.hero_heading {
+    margin-bottom: -5px;
+    font-size: 1.8rem;
+}
+
+.prompts {
+    margin-top: auto;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: center; 
+    position: relative;
+    margin: auto;
+    gap: 5px;
+    width: 70%;
+    vertical-align: middle;
+    text-align: center;
+    justify-content: center;
 }
 
-.card {
-    background-color: #DDD6CC;
-    font-weight: bold;
-    margin: 15px;
-    border-radius: 25px;
-    transition: transform 0.5s ease;
+.prompt {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    width: 30%;
+    min-height: 100px;
+    border-radius: 24px;
+    transition: 0.5s background-color ease;
 }
 
-.card:hover {
-    box-shadow: 10px 10px gray;
-    transform: scale(105%);
-}
-
-.card_image {
-    width: 80%;
-    border-radius: 20px;
-}
-
-.card_name {
-    color: #022B3A;
-    font-size: 1.2em;
-}
-
-.view_button {
-    background-color: #679289;
-    border: none;
-    width: 50%;
-    height: auto;
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 25px;
-    font-size: 1.1em;
-    font-weight: bold;
-}
-
-.view_button:hover {
-    transform: scale(105%); 
+.prompt:hover {
+    background-color:#eef0ef;
 }
