@@ -3,53 +3,66 @@ import {useEffect, useState} from "react";
 import styles from "../styles/AIPage.module.css";
 import AIHeroPrompts from "../components/ai-hero-prompts";
 import AITextInput from "../components/ai-text-input";
+import AIChatMessages from "../components/ai-chat-messages";
 
 export default function AIAssistant() {
 
-    const [ loading, setLoading ] = useState(false);
-    const [ showHero, setShowHero ] = useState(false);
-    const [ query, setQuery ] = useState('');
-    const [ recomendations, setRecommendations ] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [input, setInput] = useState("");
+    const [messages, setMessages] = useState([]);
 
-    useEffect(() => {
-        async function getRecommendations() {
-            try {
-                const response = await fetch('http://localhost/bookmart/backend/recommend.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(query),
-                    credentials: 'include'
-                });
+    const sendMessage = async(text) => {
+        const query = text ||  input.trim();
+        if (!query || loading) return;
+        setInput("");
 
-                if (!response.ok) {
-                    throw new Error('Failed to generate recommendations');
-                }
+        setMessages((prev) => [
+            ...prev,
+            { role: 'user', text: query }
+        ]);
+        setLoading(true);
 
-                const result = await response.json();
-                if (result.status === 'error') {
-                    alert("An error occured");
-                    console.log(result.message);
-                } else {
-                    setRecommendations(result);
-                }
-            } catch (err) {
-                alert("An error occured.");
-            } finally {
-                setLoading(false);
+        try {
+            const response = await fetch("http://localhost/bookmart/backend/recommend.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ query }),
+                credentials: 'include'
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to generate recommendations. Please try again.");
             }
-        }
+            const result = await response.json();
+            console.log(result);
+            setMessages((prev) => [...prev, { 
+                role: 'bot', 
+                text: 'Here are some books you may like: ',
+                books: result.recommendations 
+            }]);
 
-        getRecommendations();
-    }, []);
+        } catch (err) {
+            setMessages((prev) => [
+                ...prev,
+                { role: 'bot', text: 'Something went worng. Please try again.', error: true }
+            ]);
+        } finally {
+            setLoading(false);
+        }
+    }
 
     return(
         <div className={styles.AI_page}>
             <div className={styles.content}>
-                <AIHeroPrompts />
+                {messages.length === 0 && !loading ? (
+                    <AIHeroPrompts onPromptClick={sendMessage} />
+                ) : (
+                    <AIChatMessages messages={messages}loading={loading} />
+                )}
             </div>
-            <AITextInput/>
+            <AITextInput input={input} setInput={setInput} onSend={sendMessage} loading={loading} />
         </div>
     )
 }

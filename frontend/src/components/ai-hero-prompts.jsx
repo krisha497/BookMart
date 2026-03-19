@@ -1,6 +1,6 @@
 import styles from "../styles/AIPage.module.css";
 
-export default function AIHeroPrompts() {
+export default function AIHeroPrompts({ onPromptClick }) {
 
     const prompts = {
         "prompt1": "Something cosy for a rainy weekend",
@@ -16,12 +16,17 @@ export default function AIHeroPrompts() {
             <h2 className={styles.hero_heading}>Find your next best read</h2>
             <p className={styles.hero_description}>Describe a book, theme, or genre you love - or just ask anything. The assistant will help you find the perfect results.</p>
             <div className={styles.prompts}>
-                <button className={styles.prompt}>{prompts['prompt1']}</button>
-                <button className={styles.prompt}>{prompts['prompt2']}</button>
-                <button className={styles.prompt}>{prompts['prompt3']}</button>
-                <button className={styles.prompt}>{prompts['prompt4']}</button>
-                <button className={styles.prompt}>{prompts['prompt5']}</button>
-                <button className={styles.prompt}>{prompts['prompt6']}</button>
+                {Object.values(prompts).map((prompt) => {
+                    return(
+                        <button
+                            key={prompt}
+                            className={styles.prompt}
+                            onClick={()=>onPromptClick(prompt)}
+                        >
+                            {prompt}
+                        </button>
+                    )
+                })}
             </div>
         </div>
     )
