@@ -36,6 +36,15 @@ export default function AIAssistant() {
                 throw new Error("Failed to generate recommendations. Please try again.");
             }
             const result = await response.json();
+
+            if (result.status === "error") {
+                setMessages((prev) => [
+                    ...prev,
+                    { role: 'bot', text: result.message, error: true }
+                ]);
+                return;
+            }
+
             console.log(result);
             setMessages((prev) => [...prev, { 
                 role: 'bot', 

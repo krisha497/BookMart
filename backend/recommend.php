@@ -38,6 +38,14 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit(json_encode(['error' => 'Method not allowed']));
 }
 
+if (empty($_SESSION['user_loggedin'])) {
+    echo json_encode([
+        "status" => "error",
+        "message" => "Not Logged In"
+    ]);
+    exit;
+}
+
 $input = json_decode(trim(file_get_contents('php://input')), true);
 $query = $input['query'] ?? '';
 
