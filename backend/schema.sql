@@ -41,3 +41,23 @@ CREATE TABLE cart_items (
         FOREIGN KEY (cart_id) REFERENCES carts(id)
         ON DELETE CASCADE
 );
+
+CREATE TABLE reviews (
+    id INT NOT NULL AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    google_volume_id VARCHAR(32) NOT NULL,
+    rating TINYINT NOT NULL CHECK (rating >= 1 AND rating <= 5),
+    title VARCHAR(250) NOT NULL,
+    body TEXT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    PRIMARY KEY (id),
+    UNIQUE KEY uq_user_review (user_id, google_volume_id),
+
+    KEY idx_reviews_book (google_volume_id),
+
+    CONSTRAINT fk_user_id
+        FOREIGN KEY (user_id) REFERENCES users(id)
+        ON DELETE CASCADE
+);
