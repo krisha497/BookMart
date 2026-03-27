@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import placeholder from "../assets/book-img.png";
 
 import styles from "../styles/aboutBook.module.css";
@@ -11,6 +11,11 @@ export default function AboutBook() {
     const [quantity, setQuantity] = useState(1);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    const id = searchParams.get("id");
+    const q = searchParams.get("q");
+
+    const navigate = useNavigate();
 
     const handleSubmit = async(e) => {
         e.preventDefault();
@@ -147,6 +152,19 @@ export default function AboutBook() {
                                     {book.description || "No description available."}
                                 </p>
                             </div>
+                            <button
+                                type="button"
+                                className={styles.add_review_btn}
+                                onClick={() => navigate(`/addreview?id=${id}&q=${q}`, {
+                                    state: {
+                                        bookName: book.name,
+                                        bookImage: book.image,
+                                        bookAuthor: book.authors?.join(", ") || "Unknown Author"
+                                    }
+                                })}
+                            >
+                                Add Review
+                            </button>
                         </section>
                     </form>
                 )}

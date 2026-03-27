@@ -94,7 +94,7 @@ $stmt->bind_param('iisss', $user_id, $rating, $title, $body, $google_volume_id);
 $stmt->execute();
 
 echo json_encode([
-    "status" => "Success",
+    "status" => "success",
     "message" => "Review added successfully"
 ]);
 exit;

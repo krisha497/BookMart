@@ -194,3 +194,16 @@
         font-size: 1.5rem;
     }
 }
+
+.add_review_btn {
+    background-color: #F4B266;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.add_review_btn:hover {
+    background-color: #dba05b;
+}

@@ -11,6 +11,7 @@ import AIAssistant from './pages/AskAIPage';
 import AboutBook from './pages/aboutBook';
 import SearchResults from './pages/searchResults';
 import Layout from './components/layout';
+import AddReview from './pages/addReview';
 
 export default function App() {
   return(
@@ -23,6 +24,7 @@ export default function App() {
             <Route path='/Rankings' element={<RankingsPage />} />
             <Route path='/AIAssistant' element={<AIAssistant />} />
             <Route path='/search' element={<SearchResults />} />
+            <Route path='/addreview' element={<AddReview />} />
         </Route>
         <Route path='/login' element={<LogIn />} />
         <Route path='/signup' element={<SignUp />} />

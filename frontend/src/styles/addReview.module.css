@@ -1,0 +1,147 @@
+.add_page {
+    max-width: 680px;
+    margin: 2rem auto;
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* BANNER */
+.banner {
+    background: #fff;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    border-bottom: 1px solid #ece8e0;
+}
+
+.banner_cover {
+    width: 54px;
+    height: 74px;
+    border-radius: 6px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.banner_info {
+    flex: 1;
+}
+
+.banner_title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 3px;
+}
+
+.banner_author {
+    font-size: 13px;
+    color: #888;
+}
+
+.banner_badge {
+    background: #fff8ee;
+    color: #c48a10;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 1px solid #f0d08a;
+    flex-shrink: 0;
+}
+
+/* BODY */
+.body {
+    background: #fff;
+    padding: 1.75rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.question {
+    font-size: 15px;
+    font-weight: 500;
+    color: #1a1a1a;
+    margin-bottom: 0.5rem;
+}
+
+.star_rating {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #e8a820;
+    height: 18px;
+    display: block;
+}
+
+.reviewForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    width: 100%;
+}
+
+.title_input {
+    width: 100%;
+    border: 1.5px solid #e0dbd0;
+    border-radius: 10px;
+    padding: 11px 14px;
+    font-size: 14px;
+    background: #fff;
+    color: #1a1a1a;
+    outline: none;
+    transition: border-color 0.15s;
+}
+
+.title_input:focus {
+    border-color: #3d7a6a;
+}
+
+.text_input {
+    width: 100%;
+    border: 1.5px solid #e0dbd0;
+    border-radius: 10px;
+    padding: 11px 14px;
+    font-size: 14px;
+    background: #fff;
+    color: #1a1a1a;
+    outline: none;
+    resize: vertical;
+    min-height: 130px;
+    font-family: inherit;
+    transition: border-color 0.15s;
+}
+
+.text_input:focus {
+    border-color: #3d7a6a;
+}
+
+.submit_btn {
+    width: 100%;
+    background: #3d7a6a;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 13px 32px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.submit_btn:hover {
+    background: #2f6357;
+}
+
+.submit_btn:disabled {
+    background: #9bbfb8;
+    cursor: not-allowed;
+}
