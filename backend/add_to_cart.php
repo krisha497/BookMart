@@ -43,15 +43,22 @@ $data = json_decode($json, true);
 $google_volume_id = $data['google_volume_id'] ?? null;
 $quantity = $data['quantity'] ?? null;
 
+if (!$google_volume_id || !$quantity || $quantity < 1) {
+    echo json_encode(["status" => "error", "message" => "Invalid input"]);
+    exit;
+}
+
+$apiUrl = "https://www.googleapis.com/books/v1/volumes/{$google_volume_id}";
+$response = file_get_contents($apiUrl);
+$bookData = json_decode($response, true);
+
+$rating = $bookData['volumeInfo']['averageRating'] ?? 3.9;
+$unit_price = round($rating * 5.5 + 8, 2);
+
 $cart_id = $_SESSION['active_cart'] ?? null;
 
 if (!$cart_id) {
     echo json_encode(["status" => "error", "message" => "No active cart found"]);
-    exit;
-}
-
-if (!$google_volume_id || !$quantity || $quantity < 1) {
-    echo json_encode(["status" => "error", "message" => "Invalid input"]);
     exit;
 }
 
@@ -73,8 +80,8 @@ if ($stmt = $con-> prepare("SELECT quantity FROM cart_items WHERE cart_id = ? AN
         ]);
 
     } else {
-        $stmt = $con->prepare("INSERT INTO cart_items (cart_id, google_volume_id, quantity) VALUES (?, ?, ?)");
-        $stmt->bind_param('ssi', $cart_id, $google_volume_id, $quantity);
+        $stmt = $con->prepare("INSERT INTO cart_items (cart_id, google_volume_id, quantity, unit_price) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param('ssid', $cart_id, $google_volume_id, $quantity, $unit_price);
         $stmt->execute();
 
         echo json_encode([

@@ -4,7 +4,9 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     registered DATETIME NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    reset_token VARCHAR(64) NULL,
+    reset_expires DATETIME NULL
 );
 
 CREATE TABLE carts (
@@ -15,7 +17,6 @@ CREATE TABLE carts (
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   KEY idx_carts_user (user_id),
-  UNIQUE KEY uq_user_active_cart(user_id, status),
   CONSTRAINT fk_carts_user
     FOREIGN KEY (user_id) REFERENCES users(id)
     ON DELETE CASCADE
@@ -26,6 +27,7 @@ CREATE TABLE cart_items (
     cart_id INT NOT NULL,
     google_volume_id VARCHAR(32) NOT NULL,
     quantity INT UNSIGNED NOT NULL DEFAULT 1,
+    unit_price DECIMAL(10, 2) NOT NULL,
 
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -59,5 +61,39 @@ CREATE TABLE reviews (
 
     CONSTRAINT fk_user_id
         FOREIGN KEY (user_id) REFERENCES users(id)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE orders (
+    id INT NOT NULL AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    total FLOAT NOT NULL,
+    delivery_name VARCHAR(100) NOT NULL,
+    delivery_address VARCHAR(250) NOT NULL,
+    delivery_city VARCHAR(100) NOT NULL,
+    delivery_post_code VARCHAR(20) NOT NULL,
+    delivery_country VARCHAR(100) NOT NULL,
+    status ENUM("Order Placed", "Processing", "Shipped", "Delivered") NOT NULL DEFAULT "Order Placed",
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    PRIMARY KEY (id),
+
+    CONSTRAINT fk_orders_user
+        FOREIGN KEY (user_id) REFERENCES users(id)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE order_items (
+    id INT NOT NULL AUTO_INCREMENT,
+    order_id INT NOT NULL,
+    google_volume_id VARCHAR(32) NOT NULL,
+    quantity INT UNSIGNED NOT NULL DEFAULT 1,
+    price FLOAT NOT NULL,
+
+    PRIMARY KEY (id),
+
+    CONSTRAINT fk_order_id
+        FOREIGN KEY (order_id) REFERENCES orders (id)
         ON DELETE CASCADE
 );
