@@ -13,7 +13,7 @@ export default function CheckoutPage() {
         delivery_name: "",
         delivery_address: "",
         delivery_city: "",
-        delivery_postcode: "",
+        delivery_post_code: "",
         delivery_country: "England"
     });
 
@@ -80,10 +80,7 @@ export default function CheckoutPage() {
             } else {
                 navigate('/confirmation', {
                     state: {
-                        username: username,
-                        deliveryDetails: formData,
-                        items: orderSummary,
-                        total: orderSummary.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2)
+                        order_id: result.order_id
                     }
                 });
             }
@@ -134,13 +131,13 @@ export default function CheckoutPage() {
                                 name="delivery_city"
                                 onChange={handleChange} 
                             />
-                            <label className={styles.postcode_label}>Post Code</label>
+                            <label className={styles.post_code_label}>Post Code</label>
                             <input 
-                                className={styles.postcode_input} 
+                                className={styles.post_code_input} 
                                 type="text" 
                                 placeholder="Post Code..." 
                                 required
-                                name="delivery_postcode"
+                                name="delivery_post_code"
                                 onChange={handleChange} 
                             />
                             <label className={styles.country_label}>Country</label>

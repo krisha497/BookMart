@@ -1,6 +1,7 @@
 <?php
-ini_set('display_errors', 0);
-error_reporting(0);
+
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
 session_name('BOOKMARTSESSION');
 
@@ -25,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 session_start();
+
 include "db.php";
 
 if (!$_SESSION['user_loggedin']) {
@@ -35,29 +37,39 @@ if (!$_SESSION['user_loggedin']) {
     exit;
 }
 
-$cart_id = $_SESSION['active_cart'];
+$json = file_get_contents("php://input");
+$data = json_decode($json, true);
 
-$stmt = $con->prepare("SELECT google_volume_id, quantity FROM cart_items WHERE cart_id = ?");
-$stmt->bind_param('s', $cart_id);
+$order_id = $data['order_id'];
+
+$stmt = $con->prepare("SELECT user_id FROM orders WHERE id = ?");
+$stmt->bind_param("i", $order_id);
 $stmt->execute();
 $result = $stmt->get_result();
+$order = $result->fetch_assoc();
 
-if ($result->num_rows === 0) {
+if (!$order || $order['user_id'] !== $_SESSION['user_id']) {
     echo json_encode([
-        "items" => [],
-        "username" => $_SESSION['username']
+        "status" => "error",
+        "message" => "Unauthorized access"
     ]);
     exit;
 }
 
+$stmt = $con->prepare("SELECT * FROM order_items WHERE order_id = ?");
+$stmt->bind_param("i", $order_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
 $items = $result->fetch_all(MYSQLI_ASSOC);
-$cart_items = [];
 
-foreach ($items as $item) {
-    $volumeId = $item['google_volume_id'];
-    $quantity = $item['quantity'];
+$order_items = [];
 
-    $apiUrl = "https://www.googleapis.com/books/v1/volumes/" . urlencode($volumeId);
+foreach ($items as $row) {
+    $google_volume_id = $row['google_volume_id'];
+    $quantity = $row['quantity'];
+
+    $apiUrl = "https://www.googleapis.com/books/v1/volumes/" . urlencode($google_volume_id);
     $book_data = json_decode(file_get_contents($apiUrl), true);
 
     $imageLinks = $book_data['volumeInfo']['imageLinks'] ?? [];
@@ -66,18 +78,27 @@ foreach ($items as $item) {
     $rating = $book_data['volumeInfo']['averageRating'] ?? 3.9;
     $price = round($rating * 5.5 + 8, 2);
 
-    $cart_items[] = [
-        "google_volume_id" => $volumeId,
+    $order_items[] = [
+        "google_volume_id" => $google_volume_id,
         "quantity" => $quantity,
         "name" => $title,
         "image" => $image,
         "price" => $price
     ];
+
 }
 
+$stmt = $con->prepare("SELECT * FROM orders WHERE id = ?");
+$stmt->bind_param("i", $order_id);
+$stmt->execute();
+$order_details = $stmt->get_result()->fetch_assoc();
+
 echo json_encode([
-    "items" => $cart_items,
+    "status" => "success",
+    "order_items" => $order_items,
+    "order_details" => $order_details,
     "username" => $_SESSION['user_name']
 ]);
+exit;
 
 ?>

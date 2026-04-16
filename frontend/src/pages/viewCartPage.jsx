@@ -3,12 +3,15 @@ import styles from "../styles/viewCart.module.css";
 
 import CartList from "../components/cart-list";
 import { FaCartPlus } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 export default function viewCart() {
 
     const [ cartItems, setCartItems ] = useState([]);
     const [ loading, setLoading ] = useState(true);
     const [ error, setError ] = useState(null);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function getCart() {
@@ -90,6 +93,7 @@ export default function viewCart() {
 
     if (loading) return <p>Loading...</p>
     if (error) return <p>Error: {error}</p>
+    if (cartItems.length === 0) return <p>Cart is Empty...</p>
 
     return(
         <>
@@ -125,7 +129,7 @@ export default function viewCart() {
                 </table>
                 <div className={styles.total}>
                     <h3 className={styles.total_heading}>Total: ${cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}</h3>
-                    <button className={styles.checkout_btn}>Proceed to Checkout</button>
+                    <button className={styles.checkout_btn} onClick={()=>navigate('/checkout')}>Proceed to Checkout</button>
                 </div>
             </div>
         </>

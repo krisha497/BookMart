@@ -51,10 +51,10 @@ $data = json_decode($json, true);
 $name = $data['delivery_name'];
 $address = $data['delivery_address'];
 $city = $data['delivery_city'];
-$postcode = $data['delivery_postcode'];
+$post_code = $data['delivery_post_code'];
 $country = $data['delivery_country'];
 
-if (!$name || !$address || !$city || !$postcode || !$country) {
+if (!$name || !$address || !$city || !$post_code || !$country) {
     echo json_encode([
         "status" => "error",
         "message" => "Please fill in all form fields"
@@ -92,7 +92,7 @@ $con->begin_transaction();
 
 try {
     $stmt = $con->prepare("INSERT INTO orders (user_id, total, delivery_name, delivery_address, delivery_city, delivery_post_code, delivery_country) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param('idsssss', $user_id, $total, $name, $address, $city, $postcode, $country);
+    $stmt->bind_param('idsssss', $user_id, $total, $name, $address, $city, $post_code, $country);
     $stmt->execute();
     $order_id = $con->insert_id;
 
@@ -122,7 +122,8 @@ try {
 
     echo json_encode([
         "status" => "success",
-        "message" => "Order Placed Successfully"
+        "message" => "Order Placed Successfully",
+        "order_id" => $order_id
     ]);
 
 } catch (Exception $e) {
