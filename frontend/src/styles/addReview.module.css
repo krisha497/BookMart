@@ -93,7 +93,7 @@
     width: 100%;
     border: 1.5px solid #e0dbd0;
     border-radius: 10px;
-    padding: 11px 14px;
+    padding: 11px 0;
     font-size: 14px;
     background: #fff;
     color: #1a1a1a;
@@ -109,7 +109,7 @@
     width: 100%;
     border: 1.5px solid #e0dbd0;
     border-radius: 10px;
-    padding: 11px 14px;
+    padding: 11px 0;
     font-size: 14px;
     background: #fff;
     color: #1a1a1a;

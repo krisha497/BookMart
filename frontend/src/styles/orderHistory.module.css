@@ -1,0 +1,78 @@
+.order {
+    border: 0.5px solid #e0e0e0;
+    border-radius: 12px;
+    background: white;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+    margin-right: 24px;
+}
+
+.order_heading {
+    font-size: 13px;
+    font-weight: 500;
+    color: #888;
+    margin: 0 0 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.order_history {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0.75rem 0;
+    border-top: 0.5px solid #e0e0e0;
+}
+
+.order_history:first-of-type {
+    border-top: none;
+    padding-top: 0;
+}
+
+.book_img {
+    width: 48px;
+    height: 68px;
+    object-fit: cover;
+    border-radius: 4px;
+    flex-shrink: 0;
+    background: #f5f5f5;
+}
+
+.book_name {
+    font-size: 15px;
+    font-weight: 500;
+    margin: 0 0 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.book_authors {
+    font-size: 13px;
+    color: #888;
+    margin: 0 0 6px;
+}
+
+.quantity {
+    font-size: 12px;
+    color: #888;
+    background: #f5f5f5;
+    padding: 2px 8px;
+    border-radius: 999px;
+    display: inline-block;
+    margin: 0;
+}
+
+.btn {
+    background-color: #A5668B;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    margin-top: 24px;
+    border-radius: 24px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #945b7d;
+}

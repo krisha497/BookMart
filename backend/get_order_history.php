@@ -35,10 +35,10 @@ if (!$_SESSION['user_loggedin']) {
     exit;
 }
 
-$username = $_SESSION['user_loggedin'];
+$user_id = $_SESSION['user_id'];
 
 $stmt = $con->prepare("SELECT id FROM orders WHERE user_id = ?");
-$stmt->bind_param("i", $username);
+$stmt->bind_param("i", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -54,7 +54,7 @@ foreach ($order_ids as $order_id) {
     $order_items = $results->fetch_all(MYSQLI_ASSOC);
 
     $orders[] = [
-        "order_id" => $order_id,
+        "order_id" => $order_id['id'],
         "order_items" => $order_items
     ];
 }
